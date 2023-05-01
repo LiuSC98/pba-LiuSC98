@@ -56,13 +56,14 @@ void collide_particle_ball(
   //             no friction. You do not need to change the positions.
 
   // comment out the line below
-  p.velo -= 2.f * (p.velo - ball_velo).dot(plane_norm) * plane_norm;
+  // p.velo -= 2.f * (p.velo - ball_velo).dot(plane_norm) * plane_norm;
 
   // write a few lines of code to compute the velocity of ball and particle
   // please uncomment the lines below
-  // const Eigen::Vector2f impulse =
-  // p.velo +=
-  // ball_velo +=
+  const Eigen::Vector2f impulse = (2 * particle_mass * ball_mass * (ball_velo -  p.velo) / (particle_mass + ball_mass))
+                                  .dot(plane_norm) * plane_norm;  
+  p.velo += impulse / particle_mass;
+  ball_velo += -impulse / ball_mass;
 }
 
 /**
@@ -117,12 +118,12 @@ int main() {
   }
   const float particle_mass = 1.0f;
 
-  float dt = 0.01f;
+  float dt = 0.001f;
 
   while (!::glfwWindowShouldClose(window)) {
     pba::default_window_2d(window);
 
-    if (trajectory.size() < 3000) {
+    if (trajectory.size() < 30000) {
       ball_pos += ball_velo * dt; // step time for ball
       // collision between ball and the walls
       collision_circle_plane(ball_pos, ball_velo, ball_rad, {-box_size * 0.5f, 0.f}, {+1.f, 0.f}); // left wall
