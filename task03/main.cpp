@@ -172,9 +172,8 @@ void set_force_accelerated(
         } else { // far field approximation
           // write a few lines of code here to compute the force from far grid.
           // use the center for the gravity of the grid : `acc.grid2cg[jy * num_div + jx]`
-          unsigned int np = acc.grid2idx[iy * num_div + ix + 1] - acc.grid2idx[iy * num_div + ix];
+          unsigned int np = acc.grid2idx[jy * num_div + jx + 1] - acc.grid2idx[jy * num_div + jx];
           particles[ip].force += np * gravitational_force(acc.grid2cg[jy * num_div + jx] - particles[ip].pos);
-          
         }
       }
     }
